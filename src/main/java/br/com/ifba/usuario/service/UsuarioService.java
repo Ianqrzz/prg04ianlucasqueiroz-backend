@@ -49,8 +49,12 @@ public class UsuarioService implements UsuarioIService {
 
     @Override
     public void delete(Long id) {
-
+    if (id == null) {
+        throw new RuntimeException("ID do usuário não informado");
     }
+
+    usuarioIRepository.deleteById(id);
+}
 
     @Override
     public Usuario findByEmail(String email) {
