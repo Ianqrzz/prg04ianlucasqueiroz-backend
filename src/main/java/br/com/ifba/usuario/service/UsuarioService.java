@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.service;
 
 
+import br.com.ifba.infraestructure.exception.BusinessException;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.repository.UsuarioIRepository;
 import ch.qos.logback.core.util.StringUtil;
@@ -23,16 +24,16 @@ public class UsuarioService implements UsuarioIService {
 
     @Override
     public Usuario save(Usuario usuario) {
-
         logger.info("Iniciando o Registro do Usuario");
-        if (StringUtil.isNullOrEmpty(usuario.getEmail())){
-            throw   new RuntimeException("Login do Usuario não preenchido");
 
+        if (StringUtil.isNullOrEmpty(usuario.getEmail())){
+            throw new BusinessException("Login do Usuario não preenchido");
         }
 
         if (StringUtil.isNullOrEmpty(usuario.getSenha())){
-            throw new RuntimeException("Senha não preenchida");
+            throw new BusinessException("Senha não preenchida");
         }
+
         logger.info("Usuario Registrado com sucesso");
         return usuarioIRepository.save(usuario);
     }

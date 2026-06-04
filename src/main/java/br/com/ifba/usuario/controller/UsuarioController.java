@@ -1,6 +1,9 @@
 package br.com.ifba.usuario.controller;
 
 
+import br.com.ifba.infraestructure.mapper.ObjectMapperUtil;
+import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
+import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +20,23 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioIService usuarioIService;
+    private final ObjectMapperUtil objectMapperUtil;
 
     @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> save(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> save(@RequestBody UsuarioPostRequestDto usuariopost) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usuarioIService.save(usuario));
+                .body(objectMapperUtil.map(usuarioIService.save(
+                        (objectMapperUtil.map(usuariopost, Usuario.class))),
+                        UsuarioGetResponseDto.class));
     }
 
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findAll() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(usuarioIService.findAll());
+                .body(objectMapperUtil.mapAll(
+                        this.usuarioIService.findAll(),
+                        UsuarioGetResponseDto.class
+                ));
     }
 
     @PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
