@@ -5,6 +5,7 @@ import br.com.ifba.infraestructure.exception.BusinessException;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.repository.UsuarioIRepository;
 import ch.qos.logback.core.util.StringUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class UsuarioService implements UsuarioIService {
 
 
     @Override
+    @Transactional
     public Usuario save(Usuario usuario) {
         logger.info("Iniciando o Registro do Usuario");
 

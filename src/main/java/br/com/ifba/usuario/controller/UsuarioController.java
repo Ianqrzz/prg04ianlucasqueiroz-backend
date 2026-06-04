@@ -6,6 +6,7 @@ import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ public class UsuarioController {
     private final ObjectMapperUtil objectMapperUtil;
 
     @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> save(@RequestBody UsuarioPostRequestDto usuariopost) {
+    public ResponseEntity<?> save(@RequestBody @Valid UsuarioPostRequestDto usuariopost) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(objectMapperUtil.map(usuarioIService.save(
                         (objectMapperUtil.map(usuariopost, Usuario.class))),
@@ -40,7 +41,7 @@ public class UsuarioController {
     }
 
     @PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Usuario> update(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> update(@RequestBody @Valid Usuario usuario) {
         usuarioIService.update(usuario);
         return new ResponseEntity<>(usuario, HttpStatus.NO_CONTENT);
     }
