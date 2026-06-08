@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,25 +30,38 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     /** Trata exceções genéricas ...*/
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ValidationExceptionDetails> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException methodArgumentNotValidException) {
+    /**
+     * Trata exceções de validação de campos (@Valid)
+     * Sobrescrevendo corretamente o método da superclasse ResponseEntityExceptionHandler
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
 
-        List<FieldError> fieldErrors = methodArgumentNotValidException.getBindingResult().getFieldErrors();
+        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
 
-        String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
-        String fieldsMessage = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
+        String fields = fieldErrors.stream()
+                .map(FieldError::getField)
+                .collect(Collectors.joining(", "));
 
-        return new ResponseEntity<>(
-                ValidationExceptionDetails.builder()
-                        .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .title("Bad Request Exception, Campos Fields")
-                        .details("Cheque os campo(s) com erros")
-                        .developerMessage(methodArgumentNotValidException.getClass().getName())
-                        .fields(fields)
-                        .fieldsMessage(fieldsMessage)
-                        .build(), HttpStatus.BAD_REQUEST);
+        String fieldsMessage = fieldErrors.stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining(", "));
+
+        ValidationExceptionDetails details = ValidationExceptionDetails.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .title("Bad Request Exception, Campos Fields")
+                .details("Cheque os campo(s) com erros")
+                .developerMessage(ex.getClass().getName())
+                .fields(fields)
+                .fieldsMessage(fieldsMessage)
+                .build();
+
+        return new ResponseEntity<>(details, headers, status);
     }
 
 
@@ -59,10 +74,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         final String mensagemErro = businessException.getMessage();
 
         logger.error(mensagemErro, businessException);
+
         return construirMensagemDeErro(
                 businessException,
                 mensagemErro,
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus.BAD_REQUEST,
                 request);
     }
 

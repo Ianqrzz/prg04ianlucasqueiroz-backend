@@ -7,6 +7,8 @@ import br.com.ifba.usuario.repository.UsuarioIRepository;
 import ch.qos.logback.core.util.StringUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,13 +43,20 @@ public class UsuarioService implements UsuarioIService {
     }
 
     @Override
-    public List<Usuario> findAll() {
-        return usuarioIRepository.findAll();
+    public Page<Usuario> findAll(Pageable pageable) {
+        return usuarioIRepository.findAll(pageable);
     }
 
     @Override
-    public Usuario update(Usuario usuario) {
-        return null;
+    public Usuario update( Long id, Usuario usuario) {
+
+        Usuario usuarioAtualizado = usuarioIRepository.findById(id).orElseThrow();
+        usuarioAtualizado.setNome(usuario.getNome());
+        usuarioAtualizado.setEmail(usuario.getEmail());
+        usuarioAtualizado.setSenha(usuario.getSenha());
+        usuarioIRepository.save(usuarioAtualizado);
+        logger.info("Usuario atualizado com sucesso");
+        return  usuarioIRepository.save(usuarioAtualizado);
     }
 
     @Override

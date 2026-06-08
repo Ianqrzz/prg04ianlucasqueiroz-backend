@@ -7,7 +7,10 @@ import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
-public class UsuarioController {
+public class UsuarioController implements UsuarioIcontroller{
 
     private final UsuarioIService usuarioIService;
     private final ObjectMapperUtil objectMapperUtil;
@@ -31,19 +34,22 @@ public class UsuarioController {
                         UsuarioGetResponseDto.class));
     }
 
+
+
+
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<Page<UsuarioGetResponseDto>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(objectMapperUtil.mapAll(
-                        this.usuarioIService.findAll(),
-                        UsuarioGetResponseDto.class
-                ));
+                .body(this.usuarioIService.findAll(pageable).map(c -> objectMapperUtil.
+                        map(c, UsuarioGetResponseDto.class)));
     }
 
+
+
     @PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Usuario> update(@RequestBody @Valid Usuario usuario) {
-        usuarioIService.update(usuario);
-        return new ResponseEntity<>(usuario, HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UsuarioPostRequestDto usuarioPostResquestDto) {
+        usuarioIService.update(id,ObjectMapperUtil.map(usuarioPostResquestDto, Usuario.class));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
