@@ -7,7 +7,6 @@ import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -46,7 +43,7 @@ public class UsuarioController implements UsuarioIcontroller{
 
 
 
-    @PutMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UsuarioPostRequestDto usuarioPostResquestDto) {
         usuarioIService.update(id,ObjectMapperUtil.map(usuarioPostResquestDto, Usuario.class));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -55,13 +52,13 @@ public class UsuarioController implements UsuarioIcontroller{
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         usuarioIService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .body("Usuário deletado com sucesso");
     }
 
     @GetMapping(path = "/findbyemail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Usuario> findByEmail(@PathVariable String email) {
+    public ResponseEntity<UsuarioGetResponseDto> findByEmail(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(usuarioIService.findByEmail(email));
+                .body(objectMapperUtil.map(usuarioIService.findByEmail(email), UsuarioGetResponseDto.class));
     }
 }

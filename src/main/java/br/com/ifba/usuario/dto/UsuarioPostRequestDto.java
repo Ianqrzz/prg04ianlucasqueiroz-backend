@@ -21,7 +21,6 @@ public class UsuarioPostRequestDto {
    @Size(min = 3, max = 100)
     private  String nome;
 
-
    @JsonProperty(value = "email")
    @NotNull
    @NotBlank

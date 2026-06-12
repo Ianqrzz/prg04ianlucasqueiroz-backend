@@ -54,7 +54,6 @@ public class UsuarioService implements UsuarioIService {
         usuarioAtualizado.setNome(usuario.getNome());
         usuarioAtualizado.setEmail(usuario.getEmail());
         usuarioAtualizado.setSenha(usuario.getSenha());
-        usuarioIRepository.save(usuarioAtualizado);
         logger.info("Usuario atualizado com sucesso");
         return  usuarioIRepository.save(usuarioAtualizado);
     }
