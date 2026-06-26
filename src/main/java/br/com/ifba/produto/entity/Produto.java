@@ -1,10 +1,11 @@
 package br.com.ifba.produto.entity;
 
+import br.com.ifba.categoria.entity.Categoria;
 import br.com.ifba.infraestructure.entity.PersistenceEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 
 @ToString
@@ -18,5 +19,12 @@ public class Produto extends PersistenceEntity {
 
     private String nome;
     private String descricao;
-    private Double preco;
+    private BigDecimal preco;
+    private String imagemUrl;
+    private boolean ativo;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
 }
