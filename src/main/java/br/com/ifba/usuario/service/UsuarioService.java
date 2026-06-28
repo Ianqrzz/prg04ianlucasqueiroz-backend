@@ -2,6 +2,8 @@ package br.com.ifba.usuario.service;
 
 
 import br.com.ifba.infraestructure.exception.BusinessException;
+import br.com.ifba.perfilusuario.entity.PerfilUsuario;
+import br.com.ifba.perfilusuario.repository.PerfilUsuarioIRepository;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.repository.UsuarioIRepository;
 import ch.qos.logback.core.util.StringUtil;
@@ -24,6 +26,8 @@ public class UsuarioService implements UsuarioIService {
     @Autowired
     private UsuarioIRepository usuarioIRepository;
 
+    @Autowired
+    private PerfilUsuarioIRepository perfilUsuarioIRepository;
 
     @Override
     @Transactional
@@ -38,6 +42,16 @@ public class UsuarioService implements UsuarioIService {
             throw new BusinessException("Senha não preenchida");
         }
 
+        if (usuario.getPerfilUsuario() == null || usuario.getPerfilUsuario().getId() == null) {
+            throw new BusinessException("Perfil do usuário não informado");
+        }
+
+        PerfilUsuario perfilUsuario = perfilUsuarioIRepository.findById(usuario.getPerfilUsuario().getId())
+                .orElseThrow(() -> new BusinessException("Perfil não encontrado"));
+
+        usuario.setPerfilUsuario(perfilUsuario);
+
+        usuario.setAtivo(true);
         logger.info("Usuario Registrado com sucesso");
         return usuarioIRepository.save(usuario);
     }
@@ -50,7 +64,8 @@ public class UsuarioService implements UsuarioIService {
     @Override
     public Usuario update( Long id, Usuario usuario) {
 
-        Usuario usuarioAtualizado = usuarioIRepository.findById(id).orElseThrow();
+        Usuario usuarioAtualizado = usuarioIRepository.findById(id).orElseThrow();        
+        usuarioAtualizado.setEndereco(usuario.getEndereco());        
         usuarioAtualizado.setNome(usuario.getNome());
         usuarioAtualizado.setEmail(usuario.getEmail());
         usuarioAtualizado.setSenha(usuario.getSenha());

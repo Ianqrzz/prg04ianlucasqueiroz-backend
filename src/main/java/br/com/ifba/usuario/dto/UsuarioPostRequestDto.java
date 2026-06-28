@@ -38,5 +38,12 @@ public class UsuarioPostRequestDto {
    @JsonProperty(value = "endereco")
     private  String endereco;
 
+   @JsonProperty(value = "ativo")
+   private  Boolean ativo;
+
+    @JsonProperty(value = "perfil_usuario_id")
+    @NotNull(message = "O perfil do usuário é obrigatório")
+    private Long perfilUsuarioId;
+
 
 }

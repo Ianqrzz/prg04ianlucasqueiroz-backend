@@ -2,6 +2,7 @@ package br.com.ifba.usuario.controller;
 
 
 import br.com.ifba.infraestructure.mapper.ObjectMapperUtil;
+import br.com.ifba.perfilusuario.entity.PerfilUsuario;
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
@@ -25,10 +26,14 @@ public class UsuarioController implements UsuarioIcontroller{
 
     @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> save(@RequestBody @Valid UsuarioPostRequestDto usuariopost) {
+        Usuario usuario = objectMapperUtil.map(usuariopost, Usuario.class);
+
+        PerfilUsuario perfilUsuario = new PerfilUsuario();
+        perfilUsuario.setId(usuariopost.getPerfilUsuarioId());
+        usuario.setPerfilUsuario(perfilUsuario);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(objectMapperUtil.map(usuarioIService.save(
-                        (objectMapperUtil.map(usuariopost, Usuario.class))),
-                        UsuarioGetResponseDto.class));
+                .body(objectMapperUtil.map(usuarioIService.save(usuario), UsuarioGetResponseDto.class));
     }
 
 
@@ -45,7 +50,13 @@ public class UsuarioController implements UsuarioIcontroller{
 
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UsuarioPostRequestDto usuarioPostResquestDto) {
-        usuarioIService.update(id,ObjectMapperUtil.map(usuarioPostResquestDto, Usuario.class));
+        Usuario usuario = objectMapperUtil.map(usuarioPostResquestDto, Usuario.class);
+
+        PerfilUsuario perfilUsuario = new PerfilUsuario();
+        perfilUsuario.setId(usuarioPostResquestDto.getPerfilUsuarioId());
+        usuario.setPerfilUsuario(perfilUsuario);
+
+        usuarioIService.update(id, usuario);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -53,7 +64,7 @@ public class UsuarioController implements UsuarioIcontroller{
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         usuarioIService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-            .body("Usuário deletado com sucesso");
+                .body("Usuário deletado com sucesso");
     }
 
     @GetMapping(path = "/findbyemail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
