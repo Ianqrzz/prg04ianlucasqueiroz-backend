@@ -1,0 +1,20 @@
+# Build
+build/
+.gradle/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credenciais sensíveis (nunca sobe isso)
+src/main/resources/application.properties
