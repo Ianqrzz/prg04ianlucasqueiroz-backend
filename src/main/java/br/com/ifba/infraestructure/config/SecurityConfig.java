@@ -14,13 +14,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // MODIFICAÇÃO AQUI: 'withDefaults()' diz ao Security para buscar o bean do CorsConfig
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // LIBERAÇÃO EXPRESSA PARA O PREFLIGHT DOS NAVEGADORES:
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll()
                 );
 
         return http.build();
-    }
-}
+    }}
