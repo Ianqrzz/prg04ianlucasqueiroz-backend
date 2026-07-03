@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns(
                         "https://*.vercel.app", // Permite qualquer subdomínio da Vercel (Previews)
                         "https://prg04ianlucasqueiroz-react.vercel.app",// Seu domínio fixo
-                        "localhost:3000"
+                        "http://localhost:3000"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
