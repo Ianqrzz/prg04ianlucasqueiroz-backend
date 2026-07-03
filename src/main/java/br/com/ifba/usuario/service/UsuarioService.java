@@ -88,7 +88,12 @@ public class UsuarioService implements UsuarioIService {
     }
 
     @Override
-    public boolean validarLogin(String email, String senha) {
-        return false;
+    public Usuario validarLogin(String email, String senha) {
+        Usuario usuario = usuarioIRepository.findByEmail(email);
+
+        if (usuario != null && usuario.getSenha().equals(senha)) {
+            throw new BusinessException("Usuario ou Senha invalidos");
+        }
+        return usuario;
     }
 }

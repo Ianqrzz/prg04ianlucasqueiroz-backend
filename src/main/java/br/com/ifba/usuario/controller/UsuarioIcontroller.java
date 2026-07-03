@@ -12,4 +12,6 @@ public interface UsuarioIcontroller {
     ResponseEntity<Page<UsuarioGetResponseDto>> findAll(Pageable pageable);
     ResponseEntity<?> update(Long id, UsuarioPostRequestDto usuarioPostRequestDto);
     ResponseEntity<?> delete(Long id);
+    ResponseEntity<?> findByEmail(String email);
+    ResponseEntity<?> validarLogin(UsuarioPostRequestDto usuarioPostRequestDto);
 }

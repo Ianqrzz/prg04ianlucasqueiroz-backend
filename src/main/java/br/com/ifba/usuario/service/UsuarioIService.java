@@ -14,5 +14,5 @@ public interface UsuarioIService {
     public Usuario update(Long id,Usuario usuario);
     public void delete(Long id);
     public Usuario findByEmail(String email);
-    boolean validarLogin(String email, String senha);
+    public Usuario validarLogin(String email, String senha);
 }
