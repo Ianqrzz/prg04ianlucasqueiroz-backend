@@ -4,6 +4,7 @@ package br.com.ifba.usuario.controller;
 import br.com.ifba.infraestructure.mapper.ObjectMapperUtil;
 import br.com.ifba.perfilusuario.entity.PerfilUsuario;
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
+import br.com.ifba.usuario.dto.UsuarioLoginRequestDto;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
@@ -73,8 +74,8 @@ public class UsuarioController implements UsuarioIcontroller{
                 .body(objectMapperUtil.map(usuarioIService.findByEmail(email), UsuarioGetResponseDto.class));
     }
 
-    @PostMapping(path = "/validarLogin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UsuarioGetResponseDto> validarLogin(@RequestBody UsuarioPostRequestDto dto) {
+    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsuarioGetResponseDto> login(@RequestBody @Valid UsuarioLoginRequestDto dto) {
         Usuario usuario = usuarioIService.validarLogin(dto.getEmail(), dto.getSenha());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(objectMapperUtil.map(usuario, UsuarioGetResponseDto.class));

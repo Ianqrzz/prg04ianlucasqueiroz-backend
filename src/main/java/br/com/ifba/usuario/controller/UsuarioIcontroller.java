@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.controller;
 
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
+import br.com.ifba.usuario.dto.UsuarioLoginRequestDto;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,5 @@ public interface UsuarioIcontroller {
     ResponseEntity<?> update(Long id, UsuarioPostRequestDto usuarioPostRequestDto);
     ResponseEntity<?> delete(Long id);
     ResponseEntity<?> findByEmail(String email);
-    ResponseEntity<?> validarLogin(UsuarioPostRequestDto usuarioPostRequestDto);
+    ResponseEntity<?> login(UsuarioLoginRequestDto dto);
 }
