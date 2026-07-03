@@ -73,7 +73,7 @@ public class UsuarioController implements UsuarioIcontroller{
                 .body(objectMapperUtil.map(usuarioIService.findByEmail(email), UsuarioGetResponseDto.class));
     }
 
-    @GetMapping(path = "/validarLogin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/validarLogin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsuarioGetResponseDto> validarLogin(@RequestBody UsuarioPostRequestDto dto) {
         Usuario usuario = usuarioIService.validarLogin(dto.getEmail(), dto.getSenha());
         return ResponseEntity.status(HttpStatus.OK)
