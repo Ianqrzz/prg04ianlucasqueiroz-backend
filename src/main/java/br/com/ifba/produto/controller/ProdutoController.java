@@ -1,7 +1,6 @@
 package br.com.ifba.produto.controller;
 
 
-import br.com.ifba.categoria.entity.Categoria;
 import br.com.ifba.infraestructure.mapper.ObjectMapperUtil;
 import br.com.ifba.produto.dto.ProdutoGetResponseDto;
 import br.com.ifba.produto.dto.ProdutoPostRequestDto;
@@ -29,12 +28,9 @@ public class ProdutoController implements ProdutoIController {
     public ResponseEntity<?> save(@RequestBody @Valid ProdutoPostRequestDto produtoPost) {
         Produto produto = objectMapperUtil.map(produtoPost, Produto.class);
 
-        Categoria categoria = new Categoria();
-        categoria.setId(produtoPost.getCategoriaId());
-        produto.setCategoria(categoria);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(objectMapperUtil.map(produtoIService.save(produto), ProdutoGetResponseDto.class));
+                .body(objectMapperUtil.map(produtoIService.save(produto, produtoPost.getCategoriaId()), ProdutoGetResponseDto.class));
     }
 
     @Override
@@ -47,11 +43,15 @@ public class ProdutoController implements ProdutoIController {
 
     @Override
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid ProdutoPostRequestDto produtoPost) {
+    public ResponseEntity<ProdutoGetResponseDto> update(@PathVariable Long id, @RequestBody @Valid ProdutoPostRequestDto produtoPost) {
+
+        Produto dadosAtualizacao = objectMapperUtil.map(produtoPost, Produto.class);
+
+        // Passamos o ID do produto, a entidade com os novos dados, e o ID da nova categoria
+        Produto produtoSalvo = produtoIService.update(id, dadosAtualizacao, produtoPost.getCategoriaId());
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(objectMapperUtil.map(produtoIService.update(
-                                id, objectMapperUtil.map(produtoPost, Produto.class)),
-                        ProdutoGetResponseDto.class));
+                .body(objectMapperUtil.map(produtoSalvo, ProdutoGetResponseDto.class));
     }
 
     @Override

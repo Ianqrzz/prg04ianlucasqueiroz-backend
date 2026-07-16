@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 public interface ProdutoIService {
 
 
-    public Produto save(Produto produto);
-    public Produto update(Long id,Produto produto);
+    public Produto save(Produto produto, Long categoriaId);
+    public Produto update(Long id,Produto produto, Long categoriaId);
     public Page<Produto> findAll(Pageable pageable);
     public void delete(Long id);
 }

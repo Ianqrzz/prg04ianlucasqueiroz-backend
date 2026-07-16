@@ -1,6 +1,7 @@
 package br.com.ifba.produto.dto;
 
 import br.com.ifba.categoria.dto.CategoriaGetResponseDto;
+import br.com.ifba.estoque.dto.EstoqueGetResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,4 +37,6 @@ public class ProdutoGetResponseDto {
     @JsonProperty(value = "categoria")
     private CategoriaGetResponseDto categoria;
 
+    @JsonProperty(value = "estoque")
+    private EstoqueGetResponseDto estoque;
 }
