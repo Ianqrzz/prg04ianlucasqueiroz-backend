@@ -3,6 +3,7 @@ package br.com.ifba.produto.entity;
 import br.com.ifba.categoria.entity.Categoria;
 import br.com.ifba.estoque.entity.Estoque;
 import br.com.ifba.infraestructure.entity.PersistenceEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,5 +30,6 @@ public class Produto extends PersistenceEntity {
     private Categoria categoria;
 
     @OneToOne(mappedBy = "produto")
+    @JsonManagedReference
     private Estoque estoque;
 }
