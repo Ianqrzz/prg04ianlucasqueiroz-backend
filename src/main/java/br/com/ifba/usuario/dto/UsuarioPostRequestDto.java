@@ -31,9 +31,8 @@ public class UsuarioPostRequestDto {
    @JsonProperty(value = "senha")
    @NotNull(message = " A senha é obrigatorio")
    @NotBlank(message = " A senha não pode ser vazia")
-   @Size(min = 6)
+   @Size(min = 6)   
     private  String senha;
-
 
    @JsonProperty(value = "endereco")
     private  String endereco;

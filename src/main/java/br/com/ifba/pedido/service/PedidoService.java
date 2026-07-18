@@ -1,6 +1,8 @@
 package br.com.ifba.pedido.service;
 
 
+import br.com.ifba.endereco.entity.Endereco;
+import br.com.ifba.endereco.repository.EnderecoIRepository;
 import br.com.ifba.estoque.entity.Estoque;
 import br.com.ifba.estoque.repository.EstoqueIRepository;
 import br.com.ifba.infraestructure.exception.BusinessException;
@@ -42,6 +44,9 @@ public class PedidoService implements PedidoIService {
     @Autowired
     private ProdutoIRepository produtoIRepository;
 
+    @Autowired
+    private EnderecoIRepository enderecoIRepository;
+
 
 
     @Override
@@ -55,7 +60,11 @@ public class PedidoService implements PedidoIService {
         pedido.setStatus(StatusPedido.PENDENTE);
 
         pedido.setUsuario(usuarioIRepository.getReferenceById(dto.getIdUsuario()));
-        // pedido.setEndereco
+
+        Endereco endereco = enderecoIRepository.findById(dto.getIdEndereco())
+                .orElseThrow(() -> new BusinessException("Endereço da entrega não encontrado"));
+        pedido.setEndereco(endereco);
+
 
         List<ItemPedido> itensDoPedido = new ArrayList<>();
         BigDecimal valorTotal =  BigDecimal.ZERO;
