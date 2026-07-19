@@ -112,6 +112,50 @@ public class PedidoService implements PedidoIService {
         return pedidoIRepository.save(pedido);
     }
 
+
+    @Override
+    @Transactional
+    public Pedido atualizarStatus(Long id, StatusPedido novoStatus) {
+        logger.info("Atualizando status do pedido ID " + id + " para " + novoStatus);
+
+        Pedido pedido = pedidoIRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Pedido não encontrado"));
+
+        //se o pedido já estiver cancelado, não pode mudar o status.
+        if (pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new BusinessException("Não é possível alterar o status de um pedido cancelado.");
+        }
+
+        pedido.setStatus(novoStatus);
+        return pedidoIRepository.save(pedido);
+    }
+
+
+    @Override
+    @Transactional
+    public Pedido cancelarPedido(Long id) {
+
+        Pedido pedido = pedidoIRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Pedido não encontrado para cancelamento."));
+
+        if (pedido.getStatus() == StatusPedido.CANCELADO) {
+            throw new BusinessException("Este pedido já se encontra cancelado.");
+        }
+
+        for (ItemPedido item : pedido.getItensPedido()) {
+            Estoque estoque = estoqueIRepository.findByProdutoId(item.getProduto().getId())
+                    .orElseThrow(() -> new BusinessException("Estoque não encontrado para o produto ID: " + item.getProduto().getId()));
+
+            estoque.setQuantidade(estoque.getQuantidade() + item.getQuantidade());
+
+            estoqueIRepository.save(estoque);
+        }
+
+        pedido.setStatus(StatusPedido.CANCELADO);
+
+        return pedidoIRepository.save(pedido);
+    }
+
     @Override
     public Pedido update(Long id, Pedido pedido) {
         return null;

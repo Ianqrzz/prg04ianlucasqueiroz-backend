@@ -2,6 +2,7 @@ package br.com.ifba.pedido.service;
 
 import br.com.ifba.pedido.dto.PedidoPostRequestDto;
 import br.com.ifba.pedido.entity.Pedido;
+import br.com.ifba.pedido.entity.StatusPedido;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,6 @@ public interface PedidoIService {
     public Pedido findById(Long id);
     public Pedido findByNumeroPedido(String numeroPedido);
     public Page<Pedido> findByUsuarioID(Long id, Pageable pageable);
+    Pedido atualizarStatus(Long id, StatusPedido novoStatus);
+    Pedido cancelarPedido(Long id);
 }

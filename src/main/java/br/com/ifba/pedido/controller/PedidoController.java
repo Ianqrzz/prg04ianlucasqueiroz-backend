@@ -4,6 +4,7 @@ import br.com.ifba.infraestructure.mapper.ObjectMapperUtil;
 import br.com.ifba.pedido.dto.PedidoGetResponseDto;
 import br.com.ifba.pedido.dto.PedidoPostRequestDto;
 import br.com.ifba.pedido.entity.Pedido;
+import br.com.ifba.pedido.entity.StatusPedido;
 import br.com.ifba.pedido.service.PedidoIService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,26 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(pedidoIService.findByUsuarioID(usuarioId, pageable)
                         .map(p -> objectMapperUtil.map(p, PedidoGetResponseDto.class)));
+    }
+
+
+    @PatchMapping(path = "/{id}/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PedidoGetResponseDto> atualizarStatus(
+            @PathVariable Long id,
+            @RequestParam StatusPedido status) {
+
+        Pedido pedidoAtualizado = pedidoIService.atualizarStatus(id, status);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(objectMapperUtil.map(pedidoAtualizado, PedidoGetResponseDto.class));
+    }
+
+    @PutMapping(path = "/cancelar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PedidoGetResponseDto> cancelarPedido(@PathVariable Long id) {
+
+        Pedido pedidoCancelado = pedidoIService.cancelarPedido(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(objectMapperUtil.map(pedidoCancelado, PedidoGetResponseDto.class));
     }
 }
