@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class EnderecoPostRequestDto {
 
 
-    @JsonProperty(value = "idUsuario")
+    @JsonProperty(value = "usuario_id")
     @NotNull
-    private Long idUsuario;
+    private Long usuario_id;
 
 
     @JsonProperty(value = "rua")

@@ -23,7 +23,7 @@ public class PedidoPostRequestDto {
 
     @JsonProperty(value = "usuario_id")
     @NotNull
-    private Long idUsuario;
+    private Long usuario_id;
 
     @JsonProperty(value = "itensPedidos")
     @NotNull
