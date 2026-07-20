@@ -26,7 +26,7 @@ public class EnderecoController {
     public ResponseEntity<EnderecoGetResponseDto> save(@RequestBody @Valid EnderecoPostRequestDto enderecoPost) {
 
         Endereco endereco = objectMapperUtil.map(enderecoPost, Endereco.class);
-        Endereco enderecoSalvo = enderecoIService.save(endereco, enderecoPost.getIdUsuario());
+        Endereco enderecoSalvo = enderecoIService.save(endereco, enderecoPost.getUsuario_id());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(objectMapperUtil.map(enderecoSalvo, EnderecoGetResponseDto.class));

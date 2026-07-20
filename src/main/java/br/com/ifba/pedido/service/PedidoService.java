@@ -59,7 +59,7 @@ public class PedidoService implements PedidoIService {
         pedido.setNumeroPedido(UUID.randomUUID().toString());
         pedido.setStatus(StatusPedido.PENDENTE);
 
-        pedido.setUsuario(usuarioIRepository.getReferenceById(dto.getIdUsuario()));
+        pedido.setUsuario(usuarioIRepository.getReferenceById(dto.getUsuario_id()));
 
         Endereco endereco = enderecoIRepository.findById(dto.getIdEndereco())
                 .orElseThrow(() -> new BusinessException("Endereço da entrega não encontrado"));
