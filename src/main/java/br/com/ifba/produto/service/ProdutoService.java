@@ -81,4 +81,8 @@ public class ProdutoService implements ProdutoIService{
     public void delete(Long id){
         produtoIRepository.deleteById(id);
     }
+
+    public Produto findById(Long id){
+        return produtoIRepository.findById(id).orElseThrow();
+    }
 }

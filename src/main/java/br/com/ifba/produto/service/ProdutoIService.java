@@ -11,4 +11,6 @@ public interface ProdutoIService {
     public Produto update(Long id,Produto produto, Long categoriaId);
     public Page<Produto> findAll(Pageable pageable);
     public void delete(Long id);
+
+    public Produto findById(Long id);
 }

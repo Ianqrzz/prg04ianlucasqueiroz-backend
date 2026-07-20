@@ -61,4 +61,11 @@ public class ProdutoController implements ProdutoIController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Produto deletado com sucesso");
     }
+
+
+    @GetMapping(path = "findById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>  findById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(objectMapperUtil.map(produtoIService.findById(id), ProdutoGetResponseDto.class));
+    }
 }
