@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoPostRequestDto {
 
-    @JsonProperty(value = "idUsuario")
+    @JsonProperty(value = "usuario_id")
     @NotNull
     private Long idUsuario;
 
@@ -30,12 +30,10 @@ public class PedidoPostRequestDto {
     @Valid
     private List<ItemPedidoRequestDto> itensPedidos;
 
-    @JsonProperty(value = "idEnderecoEntrega")
+    @JsonProperty(value = "endereco_id")
     @NotNull(message = "O endereco de entrega é obrigatorio")
     private Long idEndereco;
 
-
-    // Endereco enderecoEntrega;
 
 
 }
