@@ -1,6 +1,7 @@
 package br.com.ifba.pedido.dto;
 
 
+import br.com.ifba.endereco.dto.EnderecoGetResponseDto;
 import br.com.ifba.itempedido.dto.ItemPedidoGetResponseDto;
 import br.com.ifba.itempedido.dto.ItemPedidoRequestDto;
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -35,5 +37,11 @@ public class PedidoGetResponseDto {
 
     @JsonProperty(value = "status")
     private String status;
+
+    @JsonProperty(value = "endereco")
+    private EnderecoGetResponseDto endereco;
+
+    @JsonProperty(value = "dataHoraCriacao")
+    private LocalDateTime dataHoraCriacao;
 
 }

@@ -10,8 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -34,6 +36,8 @@ public class Pedido extends PersistenceEntity {
     private Endereco endereco;
 
 
+    @CreationTimestamp
+    private LocalDateTime dataHoraCriacao;
     // Pagamento pagamento;
 
 
